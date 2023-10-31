@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  frontend:
+    depends_on:
+      - backend
+    build: ./frontend
+    ports:
+      - 80:3000
+
+  backend:
+    depends_on:
+      - db1
+      - db2
+    build: ./backend
+    ports:
+      - 3001:3001
+    environment:
+      DB_URL: mongodb://db:27017/db_1
+      DB2_URL: mongodb://db2:27017/db_2
+
+  db1:
+    image: mongo:4.0-xenial
+    ports:
+      - 27017:27017
+    volumes:
+      - db_1:/data/db
+
+  db2:
+    image: mongo:4.0-xenial
+    ports:
+      - 27018:27017
+    volumes:
+      - db_2:/data/db
+
+volumes:
+  db_1:
+  db_2:
